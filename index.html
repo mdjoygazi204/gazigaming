@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gazi Gaming Hub</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f7fb;--card:#fff;--text:#1b1d29;--muted:#6b7080;--brand:#ff6a00;--line:#e4e6ef}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12131a;--card:#1c1e29;--text:#f0f1f6;--muted:#9a9eb0;--line:#2c2f3d}}
+:root[data-theme="dark"]{--bg:#12131a;--card:#1c1e29;--text:#f0f1f6;--muted:#9a9eb0;--line:#2c2f3d}
+*{box-sizing:border-box}
+html{scroll-padding-top:60px;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif;line-height:1.5}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding:10px 12px;z-index:5}
+nav a{white-space:nowrap;text-decoration:none;color:var(--text);padding:6px 12px;border-radius:99px;background:var(--bg);font-size:14px}
+header{padding:28px 16px;text-align:center;background:linear-gradient(135deg,#ff6a00,#ee0979);color:#fff}
+header h1{margin:0 0 6px;font-size:26px}
+section{padding:22px 14px;max-width:760px;margin:auto}
+h2{margin:0 0 14px;font-size:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.card .ph{height:90px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:8px}
+.price{color:var(--brand);font-weight:700}
+.muted{color:var(--muted);font-size:14px}
+button,.btn{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;width:100%;margin-top:8px;cursor:pointer}
+input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font:inherit;margin-top:8px}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:13px}
+#adminBtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:auto;z-index:20;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+#adminUI{position:fixed;inset:0;background:var(--bg);z-index:30;overflow:auto;padding:env(safe-area-inset-top,0px) 14px calc(20px + env(safe-area-inset-bottom,0px))}
+.ah{display:flex;justify-content:space-between;align-items:center;padding:12px 0;position:sticky;top:0;background:var(--bg)}
+.row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px}
+.sm{width:auto;padding:6px 12px;font-size:14px}
+.red{background:#d33}
+#adminBtn{right:78px}
+#addBtn{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:54px;height:54px;border-radius:50%;font-size:30px;line-height:1;padding:0;z-index:20;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.ph{overflow:hidden}
+.ph.m{height:140px}
+.ph img,.ph video{width:100%;height:100%;object-fit:cover}
+#adminUI input[type=file]{padding:8px}
+#adminUI label{font-size:13px;color:var(--muted);display:block;margin-top:8px}
+#adminUI h3{margin:18px 0 8px}
+</style>
+</head>
+<body>
+<nav>
+<a href="#products">পণ্য</a><a href="#diamond">ডায়মন্ড</a><a href="#ids">ফ্রি ফায়ার আইডি</a><a href="#about">আমার সম্পর্কে</a>
+</nav>
+<header><h1 id="shopName"></h1><div>পণ্য • ফ্রি ফায়ার ডায়মন্ড • ফ্রি ফায়ার আইডি</div></header>
+
+<section id="products"><h2>🛍️ আমাদের পণ্য</h2><div class="grid" id="productList"></div></section>
+
+<section id="diamond"><h2>💎 ফ্রি ফায়ার ডায়মন্ড টপ-আপ</h2>
+<div class="card">
+<label class="muted">প্লেয়ার আইডি (UID)</label>
+<input id="uid" inputmode="numeric" placeholder="যেমন: 123456789">
+<label class="muted">প্যাকেজ বেছে নিন</label>
+<select id="pack"></select>
+<button onclick="orderDiamond()">WhatsApp এ অর্ডার করুন</button>
+</div></section>
+
+<section id="ids"><h2>🎮 ফ্রি ফায়ার আইডি বিক্রি</h2><div class="grid" id="idList"></div></section>
+
+<section id="about"><h2>👤 আমার সম্পর্কে</h2>
+<div class="card"><div class="ph" style="height:120px;font-size:50px">🧑</div>
+<h3 id="myName" style="margin:6px 0"></h3><p id="myBio" class="muted"></p>
+<p>📞 <span id="myPhone"></span></p>
+<p>📍 <span id="myAddr"></span></p></div></section>
+
+<footer id="foot"></footer>
+
+<script id="cfg">
+// ===== এখানে নিজের তথ্য বদলান =====
+var SHOP={
+ name:"Gazi Gaming Hub",
+ phone:"8801707796137", // দেশের কোডসহ WhatsApp নম্বর, + ছাড়া
+ myName:"Joy Gazi",
+ bio:"আমি অনলাইনে বিশ্বস্ত ভাবে পণ্য, ফ্রি ফায়ার ডায়মন্ড ও আইডি বিক্রি করি। দ্রুত ডেলিভারি।",
+ addr:"আপনার ঠিকানা"
+};
+var PRODUCTS=[
+ {n:"পণ্য ১",p:500,e:"👕"},{n:"পণ্য ২",p:850,e:"🎧"},
+ {n:"পণ্য ৩",p:1200,e:"⌚"},{n:"পণ্য ৪",p:300,e:"🧢"}
+];
+var PACKS=[
+ {n:"Weekly",p:165},{n:"Monthly",p:780},
+ {n:"25 ডায়মন্ড",p:30},{n:"50 ডায়মন্ড",p:45},{n:"100 ডায়মন্ড",p:80},{n:"115 ডায়মন্ড",p:88},
+ {n:"240 ডায়মন্ড",p:166},{n:"355 ডায়মন্ড",p:247},{n:"480 ডায়মন্ড",p:325},{n:"505 ডায়মন্ড",p:342},
+ {n:"610 ডায়মন্ড",p:405},{n:"850 ডায়মন্ড",p:568},{n:"1090 ডায়মন্ড",p:720},{n:"1240 ডায়মন্ড",p:805},
+ {n:"1720 ডায়মন্ড",p:1120},{n:"2090 ডায়মন্ড",p:1360},{n:"2530 ডায়মন্ড",p:1600},{n:"4010 ডায়মন্ড",p:2560},
+ {n:"5060 ডায়মন্ড",p:3190},{n:"10120 ডায়মন্ড",p:6370},
+ {n:"2x Weekly",p:320},{n:"3x Weekly",p:475},{n:"5x Weekly",p:785},{n:"2x Monthly",p:1550}
+];
+var IDS=[
+ {t:"আইডি #১",lv:"লেভেল ৬০",d:"এলিট পাস, ১০টি গান স্কিন",p:3000},
+ {t:"আইডি #২",lv:"লেভেল ৫০",d:"ইভো গান, রেয়ার বান্ডেল",p:2000},
+ {t:"আইডি #৩",lv:"লেভেল ৭০",d:"ডায়মন্ড রয়্যাল, ২০+ স্কিন",p:5000}
+];
+// =================================
+</script>
+<script>
+function $(i){return document.getElementById(i)}
+function wa(t){window.open("https://wa.me/"+SHOP.phone+"?text="+encodeURIComponent(t),"_blank")}
+function ask(t){wa("আসসালামু আলাইকুম, আমি অর্ডার করতে চাই: "+t)}
+$("shopName").textContent=SHOP.name;document.title=SHOP.name;
+$("myName").textContent=SHOP.myName;$("myBio").textContent=SHOP.bio;
+$("myPhone").textContent="0"+SHOP.phone.slice(3);$("myAddr").textContent=SHOP.addr;
+$("foot").textContent="© "+SHOP.name;
+PRODUCTS.forEach(function(x){
+ var c=document.createElement("div");c.className="card";
+ c.innerHTML=media(x,x.e)+'<div>'+x.n+'</div><div class="price">৳'+x.p+'</div><button>অর্ডার করুন</button>';
+ c.querySelector("button").onclick=function(){ask(x.n+" (৳"+x.p+")")};
+ $("productList").appendChild(c);
+});
+PACKS.forEach(function(x,i){
+ var o=document.createElement("option");o.value=i;o.textContent=x.n+" — ৳"+x.p;$("pack").appendChild(o);
+});
+function orderDiamond(){
+ var u=$("uid").value.trim();
+ if(!u){alert("আগে প্লেয়ার আইডি লিখুন");return}
+ var k=PACKS[$("pack").value];
+ wa("ফ্রি ফায়ার টপ-আপ\nUID: "+u+"\nপ্যাকেজ: "+k.n+" (৳"+k.p+")");
+}
+IDS.forEach(function(x){
+ var c=document.createElement("div");c.className="card";
+ c.innerHTML=media(x,'🔥')+'<b>'+x.t+'</b><div class="muted">'+x.lv+'</div><div class="muted">'+x.d+'</div><div class="price">৳'+x.p+'</div><button>কিনতে চাই</button>';
+ c.querySelector("button").onclick=function(){ask("ফ্রি ফায়ার "+x.t+" (৳"+x.p+")")};
+ $("idList").appendChild(c);
+});
+var ED=[
+{k:'PRODUCTS',t:'পণ্য',f:[['n','নাম'],['p','দাম (৳)','n'],['e','ইমোজি']],b:{n:'নতুন পণ্য',p:0,e:'🛍️'}},
+{k:'PACKS',t:'ডায়মন্ড প্যাকেজ',f:[['n','প্যাকেজের নাম'],['p','দাম (৳)','n']],b:{n:'',p:0}},
+{k:'IDS',t:'ফ্রি ফায়ার আইডি',f:[['t','শিরোনাম'],['lv','লেভেল'],['d','বিবরণ'],['p','দাম (৳)','n']],b:{t:'নতুন আইডি',lv:'',d:'',p:0}}
+];
+var SF=[['name','দোকানের নাম'],['phone','WhatsApp নম্বর (8801...)'],['myName','আপনার নাম'],['bio','বায়ো'],['addr','ঠিকানা']];
+function media(x,d){
+ if(!x.m)return `<div class='ph'>${d}</div>`;
+ return x.v?`<div class='ph m'><video src='${esc(x.m)}' controls playsinline preload='metadata'></video></div>`:`<div class='ph m'><img src='${esc(x.m)}' alt='' loading='lazy'></div>`;
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/</g,'&lt;')}
+function panel(){
+ var h=`<div class='ah'><b>⚙️ অ্যাডমিন</b><button class='sm' id='aClose'>বন্ধ</button></div><p class='muted'>পরিবর্তন করে সবশেষে সেভ চাপুন।</p><h3>দোকানের তথ্য</h3>`;
+ SF.forEach(function(f){h+=`<label>${f[1]}</label><input data-s='${f[0]}' value='${esc(SHOP[f[0]])}'>`});
+ ED.forEach(function(g){
+  h+=`<h3>${g.t}</h3>`;
+  window[g.k].forEach(function(r,i){
+   h+=`<div class='row' id='r-${g.k}-${i}'>`;
+   g.f.forEach(function(f){h+=`<input data-k='${g.k}' data-i='${i}' data-f='${f[0]}' data-n='${f[2]||''}' placeholder='${f[1]}' value='${esc(r[f[0]])}'>`});
+   if(g.k!=='PACKS'){h+=`<label>ছবি / ভিডিও</label>`+(r.m?(r.v?`<p class=muted>🎬 ভিডিও যোগ করা আছে</p>`:`<img src='${esc(r.m)}' style='height:70px;border-radius:8px;display:block'>`)+`<button class='sm' data-rm='${g.k}' data-i='${i}'>সরান</button>`:'')+`<input type='file' accept='image/*,video/*' data-up='${g.k}' data-i='${i}'>`}
+   h+=`<button class='sm red' data-del='${g.k}' data-i='${i}'>মুছুন</button></div>`;
+  });
+  h+=`<button class='sm' data-add='${g.k}'>+ নতুন যোগ করুন</button>`;
+ });
+ return h+`<button id='aSave' style='margin-top:20px'>💾 সেভ ও পাবলিশ</button>`;
+}
+function redraw(o){var s=o.scrollTop;o.innerHTML=panel();o.scrollTop=s}
+function openAdmin(){
+ var o=$('adminUI');
+ if(!o){
+  o=document.createElement('div');o.id='adminUI';document.body.appendChild(o);
+  o.addEventListener('input',function(e){var t=e.target,d=t.dataset;
+   if(d.s)SHOP[d.s]=t.value;
+   else if(d.k)window[d.k][d.i][d.f]=d.n?(Number(t.value)||0):t.value});
+  o.addEventListener('click',function(e){var d=e.target.dataset,id=e.target.id;
+   if(id==='aClose')o.remove();
+   else if(d.del){window[d.del].splice(d.i,1);redraw(o)}
+   else if(d.add){var g=ED.filter(function(x){return x.k===d.add})[0];window[d.add].push(Object.assign({},g.b));redraw(o)}
+   else if(d.rm){var it=window[d.rm][d.i];it.m='';it.v=0;redraw(o)}
+   else if(id==='aSave')saveAll()});
+  o.addEventListener('change',async function(e){
+   var t=e.target,d=t.dataset;
+   if(!d.up||!t.files[0])return;
+   var f=t.files[0];
+   if(f.size>20*1024*1024){alert('ফাইল ২০MB এর বেশি। ছোট ফাইল দিন।');return}
+   try{
+    var as=await claude.use('assets');
+    if(!as){alert('এখান থেকে আপলোড করা যাচ্ছে না');return}
+    t.disabled=true;
+    var r=await as.upload(f);
+    var it=window[d.up][d.i];it.m='/_blob/'+r.id;it.v=f.type.indexOf('video')===0?1:0;
+    redraw(o);
+   }catch(er){alert('আপলোড হয়নি: '+(er.message||er.code||er));t.disabled=false}
+  });
+ }
+ redraw(o);
+}
+async function saveAll(){
+ try{
+  var a=await claude.use('artifact');
+  if(!a){alert('এখান থেকে সেভ হচ্ছে না। claude.ai তে লগইন করে নিজের পেজ খুলুন।');return}
+  var c=document.documentElement.cloneNode(true);
+  ['productList','idList','pack'].forEach(function(i){c.querySelector('#'+i).innerHTML=''});
+  ['adminUI','adminBtn','addBtn'].forEach(function(i){var e=c.querySelector('#'+i);if(e)e.remove()});
+  var j=function(v){return JSON.stringify(v).replace(/</g,String.fromCharCode(92)+'u003c')};
+  c.querySelector('#cfg').textContent=' var SHOP='+j(SHOP)+'; var PRODUCTS='+j(PRODUCTS)+'; var PACKS='+j(PACKS)+'; var IDS='+j(IDS)+'; ';
+  await a.publish('<!DOCTYPE html>'+c.outerHTML);
+ }catch(e){alert('সেভ হয়নি: '+(e.message||e.code||e))}
+}
+(async function(){try{
+ if(!(window.claude&&claude.use))return;
+ var u=await claude.use('user');
+ if(u&&u.isOwner()){var b=document.createElement('button');b.id='adminBtn';b.textContent='⚙️ অ্যাডমিন';b.onclick=openAdmin;document.body.appendChild(b);var p=document.createElement('button');p.id='addBtn';p.textContent='+';p.onclick=function(){PRODUCTS.push({n:'নতুন পণ্য',p:0,e:'🛍️'});openAdmin();var el=$('r-PRODUCTS-'+(PRODUCTS.length-1));if(el)el.scrollIntoView()};document.body.appendChild(p)}
+}catch(e){}})();
+</script>
+</body>
+</html>
